@@ -1,0 +1,6 @@
+ls
+cat /etc/passwd
+ls
+whoami
+redis-cli -h 172.30.0.3 -p 6379 -a 'y0u_c4n_not_gue55_1t'
+exit

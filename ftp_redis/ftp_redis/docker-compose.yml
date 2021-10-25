@@ -1,0 +1,21 @@
+version: '3'
+services:
+  php7:
+    build: ./php/
+    ports:
+      - "8888:80"
+    networks:
+      mynetwork:
+        ipv4_address: 172.30.0.2
+  redis:
+    build: ./redis/
+    networks:
+      mynetwork:
+        ipv4_address: 172.30.0.3
+    restart: always
+    command: redis-server
+networks:
+  mynetwork:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
