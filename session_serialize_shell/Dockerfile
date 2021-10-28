@@ -1,15 +1,35 @@
-FROM php:7.2-apache
+FROM php:7.0-fpm-alpine
 
-RUN set -xe \
-    && sed  -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list  \
-    && sed  -i "s/security.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list  \
-    && apt-get update  \
-    && apt-get install -y wget
+LABEL Author="Virink <virink@outlook.com>"
 
+COPY files /tmp/
 
-COPY ./html /var/www/html/
-COPY ./config/php.ini /usr/local/etc/php/
-COPY ./config/000-default.conf /etc/apache2/sites-enabled/
-COPY ./config/ports.conf /etc/apache2/
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories \
+    && apk update \
+    && apk add nginx libxml2-dev \
+    # php ext
+    && docker-php-source extract \
+    && docker-php-ext-install soap \
+    && docker-php-source delete \
+    && mkdir /run/nginx \
+    && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
+    && sed -i -e 's/display_errors.*/display_errors = Off/' /usr/local/etc/php/php.ini \
+    # configure file
+    && mv /tmp/docker-php-entrypoint /usr/local/bin/docker-php-entrypoint \
+    && mv /tmp/nginx.conf /etc/nginx/nginx.conf \
+    && mv /tmp/vhost.nginx.conf /etc/nginx/conf.d/default.conf \
+    # www
+    && mv /tmp/src/* /var/www/html \
+    && chmod -R -w /var/www/html \
+    # && stat /var/www/html/upload || mkdir /var/www/html/upload \
+    # && chmod -R 777 /var/www/html/upload \
+    && chown -R www-data:www-data /var/www/html \
+    # clear
+    && rm -rf /tmp/* \
+    && rm -rf /etc/apk
 
-RUN chmod 755 -R /var/www/html/
+EXPOSE 80
+
+VOLUME ["/var/log/nginx"]
+
+CMD ["/bin/sh", "-c", "docker-php-entrypoint"]
