@@ -11,11 +11,12 @@ $result = "";
 $cmd = 'nl /*';
 openssl_private_encrypt($cmd, $result, $pri_key);
 
-//echo base64_encode($result);
+echo base64_encode($result);
 //echo base64_encode($cmd);
 //
 $another = "";
-$sec = 'JQWxEvF5TfWww/vOsthY+A==';
+$sec = "b5qNA4/iBbTrjg8bHUqJ1g==";
+//$sec = 'JQWxEvF5TfWww/vOsthY+A==';
 
 openssl_private_decrypt(base64_decode($sec), $another, $pri_key);
 echo $another;
