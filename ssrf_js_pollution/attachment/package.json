@@ -1,0 +1,19 @@
+{
+  "name": "echo",
+  "version": "1.0.0",
+  "description": "The only one feature of this challenge is the following 4 lines of code:",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "ip": "^1.1.5",
+    "is-obj": "^2.0.0",
+    "request": "*"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
