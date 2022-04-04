@@ -1,0 +1,9 @@
+version: '3'
+services:
+  web2:
+    build: .
+    restart: always
+    environment:
+      - FLAG=flag{fake_flag}
+    ports:
+      - 8000:8000

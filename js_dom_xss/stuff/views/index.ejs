@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>...</title>
+		<script src="/js/jquery-3.3.1.min.js"></script>
+	</head>
+	<body>
+		<div>
+			<form method="POST" action="/note">
+				Write your note:
+				<br><br>
+				<input  id="titleField" name="title" placeholder="Title">
+				<br><br>
+				<textarea id="contentField" rows="10" cols="50" name="content" placeholder="Content"></textarea>
+				<br><br>
+				<button id="noteSubmitBtn">Submit</button>
+			</form>
+		</div>
+		<script type="data" id="data">
+			<%- data %>
+		</script>
+		<div>
+			<ul id='nodes'>
+			</ul>
+		</div>
+		<hr>
+		<div>
+			<form method="GET" action="/">
+				Search for notes:
+				<br><br>
+				<input type="text" name="search" placeholder="Title">
+				<br><br>
+				<button>Submit</button>
+			</form>
+			<br>
+		</div>
+		<script>
+			window.onload = function() {
+				datanode = document.getElementById('data')
+				data = JSON.parse(datanode.innerText)
+				ulnode = document.getElementById('nodes')
+				searchnode = {}
+                console.log(data.search)
+				if(!$.isEmptyObject(data.search.result)) {
+					$.extend(true, searchnode, data.search.result)
+					nodeli = `<div id=${searchnode.id}><li><a href='/note/${searchnode.id}'>${searchnode.title}</a></li></div>`
+					$("#nodes").append(nodeli)
+				}
+				for(let i=0 ;i<data.all.length; i++) {
+					nodeli = `<div id=${data.all[i].id}><li><a href='/note/${data.all[i].id}'>${data.all[i].title}</a></li></div>`
+					$("#nodes").append(nodeli)
+				}
+			}
+		</script>
+	</body>
+</html>
